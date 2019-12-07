@@ -31,8 +31,10 @@ date = datetime.today()
 zipFilename = dateP(date.year) + "-" + dateP(date.month) + "-" + dateP(date.day) + "-" + dateP(date.hour) + "-" + dateP(date.minute) + "-" + dateP(date.second) + ".zip"
 
 backupBaseDir = "./backups"
-worlds = {"Main": "./Main", "Sion": "./Main/Sion"}
+worlds = {"Main": "./Main", "Sion": "./Main/Sion", "Kalazben": "./Main/Kalazben"}
 keepTime = timedelta(days=15)
+
+worldSubfolders = ['region', 'playerdata', 'data']
 
 for worldName, worldPath in worlds.items():
     backupDir = os.path.join(backupBaseDir, worldName)
@@ -42,11 +44,12 @@ for worldName, worldPath in worlds.items():
     print("Creating world backup of " + worldName + "...")
 
     with zipfile.ZipFile(os.path.join(backupDir, zipFilename), "w", zipfile.ZIP_DEFLATED, True) as myzip:
-        regionData = os.path.join(worldPath, "region")
-        for dir, subdirs, files in os.walk(regionData):
-            assetsDir = dir.replace(worldPath, worldName)
-            for filename in files:
-                myzip.write(os.path.join(dir, filename), os.path.join(assetsDir, filename))
+        for subfolderName in worldSubfolders:
+            subfolder = os.path.join(worldPath, subfolderName)
+            for dir, subdirs, files in os.walk(subfolder):
+                assetsDir = dir.replace(worldPath, worldName)
+                for filename in files:
+                    myzip.write(os.path.join(dir, filename), os.path.join(assetsDir, filename))
 
         myzip.write(os.path.join(worldPath, "level.dat"), os.path.join(worldName, "level.dat"))
         myzip.close()
@@ -54,7 +57,11 @@ for worldName, worldPath in worlds.items():
         print("Backup of " + worldName + " created.")
 
     print("Checking for old backups...")
+    fileMatchRegex = re.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}.zip$")
     for filename in os.listdir(backupDir):
+        if not fileMatchRegex.match(filename):
+            continue
+
         examinedFile = os.path.join(backupDir, filename)
         lastModified = datetime.fromtimestamp(os.path.getmtime(examinedFile))
         if datetime.now() - lastModified > keepTime:
