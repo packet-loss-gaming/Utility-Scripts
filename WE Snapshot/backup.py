@@ -30,8 +30,8 @@ date = datetime.today()
 
 zipFilename = dateP(date.year) + "-" + dateP(date.month) + "-" + dateP(date.day) + "-" + dateP(date.hour) + "-" + dateP(date.minute) + "-" + dateP(date.second) + ".zip"
 
-backupBaseDir = "./backups"
-worlds = {"Main": "./Main", "Sion": "./Main/Sion", "Kalazben": "./Main/Kalazben"}
+backupBaseDir = "/srv_st/minecraft_legacy_backups"
+worlds = {"City": "./City", "Halzeil": "./Halzeil", "Halzeil_nether": "./Halzeil_nether", "Astaria": "./Astaria"}
 keepTime = timedelta(days=15)
 
 worldSubfolders = ['region', 'playerdata', 'data']
