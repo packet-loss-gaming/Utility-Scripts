@@ -30,7 +30,7 @@ date = datetime.today()
 
 zipFilename = dateP(date.year) + "-" + dateP(date.month) + "-" + dateP(date.day) + "-" + dateP(date.hour) + "-" + dateP(date.minute) + "-" + dateP(date.second) + ".zip"
 
-backupBaseDir = "/srv_st/minecraft_legacy_backups"
+backupBaseDir = "/srv-st/minecraft/skelril/backups"
 worlds = {"City": "./City", "Halzeil": "./Halzeil", "Halzeil_nether": "./Halzeil_nether", "Astaria": "./Astaria"}
 keepTime = timedelta(days=15)
 
